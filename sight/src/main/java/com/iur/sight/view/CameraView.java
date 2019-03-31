@@ -95,7 +95,7 @@ public class CameraView extends RelativeLayout implements SurfaceHolder.Callback
     private OnAudioFocusChangeListener audioFocusChangeListener;
 
     public CameraView(Context context) {
-        this(context, (AttributeSet)null);
+        this(context, null);
     }
 
     public CameraView(Context context, AttributeSet attrs) {
@@ -140,6 +140,7 @@ public class CameraView extends RelativeLayout implements SurfaceHolder.Callback
         this.initView();
         this.mHolder = this.mVideoView.getHolder();
         this.mHolder.addCallback(this);
+
         this.audioFocusChangeListener = new OnAudioFocusChangeListener() {
             @Override
             public void onAudioFocusChange(int focusChange) {
@@ -150,9 +151,8 @@ public class CameraView extends RelativeLayout implements SurfaceHolder.Callback
             @Override
             public void capture() {
                 if (supportCapture) {
-                    capture();
+                    takeCapture();
                 }
-
             }
 
             @Override
@@ -181,7 +181,6 @@ public class CameraView extends RelativeLayout implements SurfaceHolder.Callback
                 if (cameraViewListener != null) {
                     cameraViewListener.quit();
                 }
-
             }
 
             @Override
@@ -223,7 +222,6 @@ public class CameraView extends RelativeLayout implements SurfaceHolder.Callback
                 if (cameraViewListener != null) {
                     cameraViewListener.recordSuccess(fileName, (int) recordDuration / 1000);
                 }
-
             }
 
             @Override
@@ -326,16 +324,16 @@ public class CameraView extends RelativeLayout implements SurfaceHolder.Callback
         this.initRetryView();
         this.initSubmitView();
         this.initPlayControlView();
-        this.addView(this.mVideoView);
-        this.addView(this.mCaptureButton);
-        this.addView(this.mImageViewClose);
-        this.addView(this.mImageViewSwitch);
-        this.addView(this.mReminderToast);
-        this.addView(this.mFocusView);
-        this.addView(this.mTextViewProgress);
-        this.addView(this.mImageViewRetry);
-        this.addView(this.mImageViewSubmit);
-        this.addView(this.mImageViewPlayControl);
+        this.addView(mVideoView);
+        this.addView(mCaptureButton);
+        this.addView(mImageViewClose);
+        this.addView(mImageViewSwitch);
+        this.addView(mReminderToast);
+        this.addView(mFocusView);
+        this.addView(mTextViewProgress);
+        this.addView(mImageViewRetry);
+        this.addView(mImageViewSubmit);
+        this.addView(mImageViewPlayControl);
         this.updateReminderView();
     }
 
@@ -438,15 +436,15 @@ public class CameraView extends RelativeLayout implements SurfaceHolder.Callback
     }
 
     private void initSubmitView() {
-        this.mImageViewSubmit = new ImageView(this.mContext);
-        LayoutParams imageViewSubmitParam = new LayoutParams(this.controlIconWidth, this.controlIconWidth);
+        mImageViewSubmit = new ImageView(mContext);
+        LayoutParams imageViewSubmitParam = new LayoutParams(controlIconWidth, controlIconWidth);
         imageViewSubmitParam.addRule(11, -1);
         imageViewSubmitParam.addRule(12, -1);
-        imageViewSubmitParam.setMargins(0, 0, this.controlIconMargin, this.controlIconMarginBottom);
-        this.mImageViewSubmit.setLayoutParams(imageViewSubmitParam);
-        this.mImageViewSubmit.setImageResource(R.drawable.rc_ic_sight_record_submit);
-        this.mImageViewSubmit.setVisibility(GONE);
-        this.mImageViewSubmit.setOnClickListener(new OnClickListener() {
+        imageViewSubmitParam.setMargins(0, 0, controlIconMargin, controlIconMarginBottom);
+        mImageViewSubmit.setLayoutParams(imageViewSubmitParam);
+        mImageViewSubmit.setImageResource(R.drawable.rc_ic_sight_record_submit);
+        mImageViewSubmit.setVisibility(GONE);
+        mImageViewSubmit.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 mImageViewRetry.setEnabled(false);
@@ -570,15 +568,14 @@ public class CameraView extends RelativeLayout implements SurfaceHolder.Callback
             this.mCamera.release();
             this.mCamera = null;
         }
-
     }
 
-    public void capture() {
+    public void takeCapture() {
         if (this.supportCapture) {
             if (this.autoFocus) {
                 this.mCamera.autoFocus(this);
             } else if (this.SELECTED_CAMERA == this.CAMERA_POST_POSITION) {
-                this.mCamera.takePicture((ShutterCallback)null, (PictureCallback)null, new PictureCallback() {
+                this.mCamera.takePicture(null, null, new PictureCallback() {
                     @Override
                     public void onPictureTaken(byte[] data, Camera camera) {
                         Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
@@ -591,7 +588,7 @@ public class CameraView extends RelativeLayout implements SurfaceHolder.Callback
                     }
                 });
             } else if (this.SELECTED_CAMERA == this.CAMERA_FRONT_POSITION) {
-                this.mCamera.takePicture((ShutterCallback)null, (PictureCallback)null, new PictureCallback() {
+                this.mCamera.takePicture(null, null, new PictureCallback() {
                     @Override
                     public void onPictureTaken(byte[] data, Camera camera) {
                         Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
@@ -613,7 +610,7 @@ public class CameraView extends RelativeLayout implements SurfaceHolder.Callback
     public void onAutoFocus(boolean success, Camera camera) {
         if (this.autoFocus) {
             if (this.SELECTED_CAMERA == this.CAMERA_POST_POSITION && success) {
-                this.mCamera.takePicture((ShutterCallback)null, (PictureCallback)null, new PictureCallback() {
+                this.mCamera.takePicture(null, null, new PictureCallback() {
                     @Override
                     public void onPictureTaken(byte[] data, Camera camera) {
                         Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
@@ -626,7 +623,7 @@ public class CameraView extends RelativeLayout implements SurfaceHolder.Callback
                     }
                 });
             } else if (this.SELECTED_CAMERA == this.CAMERA_FRONT_POSITION) {
-                this.mCamera.takePicture((ShutterCallback)null, (PictureCallback)null, new PictureCallback() {
+                this.mCamera.takePicture(null, null, new PictureCallback() {
                     @Override
                     public void onPictureTaken(byte[] data, Camera camera) {
                         Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
@@ -827,8 +824,8 @@ public class CameraView extends RelativeLayout implements SurfaceHolder.Callback
         Log.e(TAG,"stopRecord");
 
         if (this.mediaRecorder != null) {
-            this.mediaRecorder.setOnErrorListener((MediaRecorder.OnErrorListener)null);
-            this.mediaRecorder.setOnInfoListener((MediaRecorder.OnInfoListener)null);
+            this.mediaRecorder.setOnErrorListener(null);
+            this.mediaRecorder.setOnInfoListener(null);
             this.mediaRecorder.setPreviewDisplay((Surface)null);
 
             try {
@@ -1046,7 +1043,6 @@ public class CameraView extends RelativeLayout implements SurfaceHolder.Callback
         if (this.mCaptureButton != null) {
             this.mCaptureButton.setMaxRecordDuration(duration);
         }
-
     }
 
     private void setRecordControlViewVisibility(boolean visual) {

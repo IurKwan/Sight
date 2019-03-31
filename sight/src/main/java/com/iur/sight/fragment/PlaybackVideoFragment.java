@@ -3,7 +3,6 @@ package com.iur.sight.fragment;
 import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -56,7 +55,6 @@ public class PlaybackVideoFragment extends Fragment implements EasyVideoCallback
     }
 
     @Override
-    @Nullable
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.sight_palyer_fragment, container, false);
     }
@@ -64,7 +62,7 @@ public class PlaybackVideoFragment extends Fragment implements EasyVideoCallback
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        this.mPlayer = view.findViewById(R.id.playbackView);
+        this.mPlayer = (EasyVideoPlayer) view.findViewById(R.id.playbackView);
         this.mPlayer.setCallback(this);
         this.mPlayer.setSource(Uri.parse(this.getArguments().getString("output_uri")));
         if (!fromSightListImageVisible) {

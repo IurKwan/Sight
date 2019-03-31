@@ -21,8 +21,14 @@ import java.io.File;
  */
 public class SightRecordActivity extends AppCompatActivity implements PermissionInterface {
 
-    //要申请的权限
-    private String[] mPermissions = {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.RECORD_AUDIO, Manifest.permission.CAMERA};
+    /**
+     * 要申请的权限
+     */
+    private String[] mPermissions = {Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.RECORD_AUDIO,
+            Manifest.permission.CAMERA};
+
     private PermissionHelper permissionHelper;
 
     private CameraView mCameraView;
@@ -88,7 +94,8 @@ public class SightRecordActivity extends AppCompatActivity implements Permission
             file.mkdirs();
         }
         mCameraView.setSaveVideoPath(path);
-
+        mCameraView.setSupportCapture(true);
+        mCameraView.setAutoFocus(false);
         mCameraView.setCameraViewListener(new CameraView.CameraViewListener() {
             @Override
             public void quit() {
