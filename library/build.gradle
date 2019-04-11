@@ -12,6 +12,9 @@ android {
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
+        // 帮助混淆
+        consumerProguardFiles 'proguard-rules.pro'
+
     }
 
     buildTypes {
